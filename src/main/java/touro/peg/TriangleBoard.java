@@ -1,36 +1,43 @@
 package touro.peg;
 
 
+import java.beans.Transient;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
 
-public class TriangleBoard {
+public class TriangleBoard
+{
     private boolean[] pegs = new boolean[15];
     private int startingIndex;
-    private PlayMove playMove;
+    private transient PlayMove playMove;
 
-    public TriangleBoard(int startingIndex) {
+    public TriangleBoard(int startingIndex)
+    {
         this.startingIndex = startingIndex;
         this.playMove = new PlayMove(this);
-        for (int i = 0; i < pegs.length; i++) {
+        for (int i = 0; i < pegs.length; i++)
+        {
             pegs[i] = i != startingIndex;
         }
     }
 
-    public TriangleBoard(boolean[] pegs, int startingIndex) {
+    public TriangleBoard(boolean[] pegs, int startingIndex)
+    {
         this.startingIndex = startingIndex;
         this.playMove = new PlayMove(this);
 
         System.arraycopy(pegs, 0, this.pegs, 0, pegs.length);
     }
 
-    public boolean[] getPegs() {
+    public boolean[] getPegs()
+    {
         return pegs;
     }
 
-    public void setPeg(int pegIndex, boolean pegStatus) {
+    public void setPeg(int pegIndex, boolean pegStatus)
+    {
         pegs[pegIndex] = pegStatus;
     }
 
@@ -39,26 +46,31 @@ public class TriangleBoard {
         return startingIndex;
     }
 
-    public PlayMove getPlayMove() {
+    public PlayMove getPlayMove()
+    {
         return playMove;
     }
 
-    public boolean hasPeg(int index) {
+    public boolean hasPeg(int index)
+    {
         return pegs[index];
     }
 
-    private int intPeg(int index) {
+    private int intPeg(int index)
+    {
         return pegs[index] ? 1 : 0;
     }
 
 
-    public TriangleBoard triangleBoardCopy() {
+    public TriangleBoard triangleBoardCopy()
+    {
         TriangleBoard triangleBoardCopy = new TriangleBoard(0);
         System.arraycopy(pegs, 0, triangleBoardCopy.pegs, 0, 15);
         return triangleBoardCopy;
     }
 
-    public ArrayList<TriangleBoard> getEquivalentBoards() {
+    public ArrayList<TriangleBoard> getEquivalentBoards()
+    {
         ArrayList<TriangleBoard> equivalentBoards = new ArrayList<>();
         equivalentBoards.add(this);
         equivalentBoards.add(new TriangleBoard(flipPegs(pegs), startingIndex));
@@ -75,35 +87,42 @@ public class TriangleBoard {
     }
 
 
-
-    public boolean equalsBoard(TriangleBoard board) {
-        if (Arrays.equals(pegs, board.pegs)) {
+    public boolean equalsBoard(TriangleBoard board)
+    {
+        if (Arrays.equals(pegs, board.pegs))
+        {
             return true;
         }
         boolean[] flipped = flipPegs(board.pegs);
-        if (Arrays.equals(pegs, flipped)) {
+        if (Arrays.equals(pegs, flipped))
+        {
             return true;
         }
         boolean[] rotated1 = rotatePegs(board.pegs);
-        if (Arrays.equals(pegs, rotated1)) {
+        if (Arrays.equals(pegs, rotated1))
+        {
             return true;
         }
         boolean[] rotated1Mirror = flipPegs(rotated1);
-        if (Arrays.equals(pegs, rotated1Mirror)) {
+        if (Arrays.equals(pegs, rotated1Mirror))
+        {
             return true;
         }
         boolean[] rotated2 = rotatePegs(rotated1);
-        if (Arrays.equals(pegs, rotated2)) {
+        if (Arrays.equals(pegs, rotated2))
+        {
             return true;
         }
         boolean[] rotated2Mirror = flipPegs(rotated2);
-        if (Arrays.equals(pegs, rotated2Mirror)) {
+        if (Arrays.equals(pegs, rotated2Mirror))
+        {
             return true;
         }
         return false;
     }
 
-    private boolean[] rotatePegs(boolean[] pegs) {
+    private boolean[] rotatePegs(boolean[] pegs)
+    {
         boolean[] rotated = new boolean[15];
         rotated[0] = pegs[14];
         rotated[1] = pegs[9];
@@ -123,7 +142,8 @@ public class TriangleBoard {
         return rotated;
     }
 
-    private boolean[] flipPegs(boolean[] pegs) {
+    private boolean[] flipPegs(boolean[] pegs)
+    {
         boolean[] flipped = new boolean[15];
         flipped[0] = pegs[0];
         flipped[1] = pegs[2];
@@ -146,7 +166,8 @@ public class TriangleBoard {
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return String.format("""
                             %d
                            %d %d
@@ -160,12 +181,16 @@ public class TriangleBoard {
     }
 
 
-    public boolean isWin() {
+    public boolean isWin()
+    {
         int numTrues = 0;
-        for (boolean peg : pegs) {
-            if (peg) {
+        for (boolean peg : pegs)
+        {
+            if (peg)
+            {
                 numTrues++;
-                if (numTrues == 2) {
+                if (numTrues == 2)
+                {
                     return false;
                 }
             }
@@ -173,17 +198,20 @@ public class TriangleBoard {
         return numTrues == 1;
     }
 
-    public boolean isBestWin() {
+    public boolean isBestWin()
+    {
         return isWin() && pegs[startingIndex];
     }
 
     @Override
     public boolean equals(Object o)
     {
-        if (this == o) {
+        if (this == o)
+        {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass())
+        {
             return false;
         }
         TriangleBoard that = (TriangleBoard) o;
